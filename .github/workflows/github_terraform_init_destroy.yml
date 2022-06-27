@@ -2,28 +2,44 @@ name : 'Terraform Github Actions'
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "main" ]
+  # push:
+  #   branches: [ "main" ]
+
+env:
+  BUCKET: manpreet-s3-bucket
+  TFSTATE_FILE: mk.tfstate
+  DB_TABLE: mk-table
+  
 
 jobs:
   terraform:
     name: Terraform
     runs-on:  ubuntu-latest
 
-    env: 
-      AWS_ACCESS_KEY_ID:      ${{secrets.AWS_ACCESS_KEY_ID}}
-      AWS_SECRET_ACCESS_KEY:  ${{secrets.AWS_SECRET_ACCESS_KEY}}
-      AWS_SESSION_TOKEN:      ${{secrets.AWS_SESSION_TOKEN}}
-
-      AWS_REGION: ap-northeast-1
+    defaults:
+      run:
+        working-directory: ./TestModule
 
     steps:
       - uses: actions/checkout@v3
       - uses: hashicorp/setup-terraform@v2
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          AWS_ACCESS_KEY_ID:      ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN:      ${{ secrets.AWS_SESSION_TOKEN }} add token in secrets
+
+          AWS_REGION: us-east-1      
+
       - name: Terraform Init
         id: init
-        run:  terraform init
+        run:
+          terraform init -reconfigure
+         -backend-config="bucket=$BUCKET" 
+         -backend-config="key=$TFSTATE_FILE" 
+         -backend-config="dynamodb_table=$DB_TABLE"
 
       - name: Terraform Destroy
         id: destroy
