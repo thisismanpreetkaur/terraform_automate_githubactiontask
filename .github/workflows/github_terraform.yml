@@ -2,9 +2,13 @@ name : 'Terraform Github Actions'
 
 on:
   workflow_dispatch:
+<<<<<<< HEAD
   push:
     branches: [ "main" ]
 
+=======
+  push: ["main"]
+>>>>>>> 8d5f2c67a5caa952c92a959174e3ddc91aa32a62
 
 jobs:
   terraform:
