@@ -41,7 +41,7 @@ securitygroup_tags = {
 
 
 ## EC2 Instance Values
-ami = "ami-07f03432f2e507c3c"
+ami = "ami-052efd3df9dad4825"
 instance_type = "t2.micro"
 name          =  "Mk first instance"
 owner        =   "manpreet.kaur@cloudeq.com"
