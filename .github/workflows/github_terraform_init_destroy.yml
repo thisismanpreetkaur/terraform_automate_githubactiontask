@@ -2,7 +2,7 @@ name : 'Terraform Github Actions'
 
 on:
   workflow_dispatch:
-  push: ["master"]
+  push: ["main"]
 
 jobs:
   terraform:
